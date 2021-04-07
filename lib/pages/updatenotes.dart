@@ -12,7 +12,7 @@ class _AddnoteState extends State<Addnote> {
 
   void addData(String head,String content) {
     DocumentReference ref =
-    FirebaseFirestore.instance.collection("MyData").doc("Notes");
+    FirebaseFirestore.instance.collection("MyData").doc("$head");
     ref.set({
       'title': head,
       'content': content
@@ -53,6 +53,7 @@ class _AddnoteState extends State<Addnote> {
                     ),
                   ],
                 ),
-        ));
+        )
+    );
   }
 }

@@ -1,67 +1,84 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:notes3/pages/updatenotes.dart';
+import 'package:notes3/pages/delete.dart';
 
-class Snote extends StatefulWidget {
+class Test extends StatefulWidget {
   @override
-  _SnoteState createState() => _SnoteState();
+  _TestState createState() => _TestState();
 }
 
-class _SnoteState extends State<Snote> {
-  DocumentReference documentReference =
-  FirebaseFirestore.instance.collection("MyData").doc("Notes");
-
-
-  readData() {
-    documentReference.get().then((datasnapshot) {
-      print(datasnapshot.data()["title"]);
-      print(datasnapshot.data()["content"]);
-    });
-  }
-
-  deleteData() {
-    documentReference.delete();
-  }
-
+class _TestState extends State<Test> {
+  String title, content;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: StreamBuilder(
-          stream: FirebaseFirestore.instance.collection("MyData").snapshots(),
-          builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (!snapshot.hasData) return new Text('Loading...');
-          return ListView(
-            children: snapshot.data.docs.map((DocumentSnapshot document) {
-              return new ListTile(
-                title: new Text(document['name']),
-                subtitle: new Text(document['phone']),
-                  onTap: () {deleteData();}
-              );
-            }).toList(),
-          );
-        },
+      appBar: AppBar(
+        title: Text("Notes"),
+      ),
+      body: Center(
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    child: Text("Title"),
+                  ),
+                  Expanded(
+                    child: Text("Body"),
+                  ),
+                ],
+              ),
+            ),
+            StreamBuilder(
+              stream: FirebaseFirestore.instance.collection("MyData").snapshots(),//pathway
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                if (snapshot.hasData) {
+                  return ListView.builder(
+                      shrinkWrap: true, //unlimited data
+                      itemCount: snapshot.data.docs.length,
+                      itemBuilder: (context, index) {
+                        DocumentSnapshot documentSnapshot =
+                        snapshot.data.docs[index];
+                        return Row(
+                          children: <Widget>[
+                            Expanded(
+                              child: Text(documentSnapshot["title"]),
+                            ),
+                            Expanded(
+                              child: Text(documentSnapshot["content"]),
+                            ),
+                          ],
+                        );
+                      });
+                } else {
+                  return Text(snapshot.error.toString());
+                }
+              },
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                RaisedButton(
+                  child: Text("Create"),
+                  onPressed: () {Navigator.push(
+                      context, MaterialPageRoute(builder: (context) => Addnote()));
+                  },
+                ),
+                RaisedButton(
+                  child: Text("Delete"),
+                  onPressed: () {Navigator.push(
+                      context, MaterialPageRoute(builder: (context) => Delete()));
+                  },
+                )
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
 }
-
-class DriverList extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-  return new StreamBuilder<QuerySnapshot>(
-    stream: FirebaseFirestore.instance.collection('DriverList').snapshots(),
-    builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-      if (!snapshot.hasData) return new Text('Loading...');
-      return new ListView(
-        children: snapshot.data.docs.map((DocumentSnapshot document) {
-          return new ListTile(
-            title: new Text(document['name']),
-            subtitle: new Text(document['phone']),
-          );
-        }).toList(),
-      );
-    },
-  );
-}}
-
