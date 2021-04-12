@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:notes3/pages/updatenotes.dart';
+import 'package:notes3/pages/delete.dart';
 
 class Snote extends StatefulWidget {
   @override
@@ -14,22 +15,22 @@ class _SnoteState extends State<Snote> {
 
   readData() {
     documentReference.get().then((datasnapshot) {
-      print(datasnapshot.data()["title"]);
-      print(datasnapshot.data()["content"]);
+      Text(datasnapshot.data()["title"]);
+      Text(datasnapshot.data()["content"]);
     });
   }
 
   deleteData() {
-    documentReference.delete();
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => Delete()));
   }
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: StreamBuilder(
           stream: FirebaseFirestore.instance.collection("MyData").snapshots(),
-          builder: (context,snapshot) {
+          builder: (BuildContext context, AsyncSnapshot snapshot) {
             if (snapshot.hasError) {
               return Text(snapshot.error.toString());
             } else {
@@ -44,7 +45,11 @@ class _SnoteState extends State<Snote> {
                             child: Text("Add Notes"),
                             onPressed: () {Navigator.push(
                                 context, MaterialPageRoute(builder: (context) => Addnote()));}
-                        )
+                        ),
+                    ),
+                    RaisedButton(
+                        child: Text("Delete"),
+                        onPressed: () {deleteData();}
                     ),
                   ],
                 ),

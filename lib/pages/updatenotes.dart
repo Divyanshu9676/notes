@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:notes3/pages/database.dart';
 
 class Addnote extends StatefulWidget {
   @override
@@ -7,8 +8,9 @@ class Addnote extends StatefulWidget {
 }
 
 class _AddnoteState extends State<Addnote> {
-  final hea = TextEditingController();
-  final con = TextEditingController();
+  final TextEditingController hea = TextEditingController();
+  final TextEditingController con = TextEditingController();
+  Databasehelper databasehelper;
 
   void addData(String head,String content) {
     DocumentReference ref =
@@ -47,7 +49,7 @@ class _AddnoteState extends State<Addnote> {
                     Center(
                         child: RaisedButton(
                             child: Text("Save the NOTE"),
-                            onPressed: () {
+                            onPressed: () {databasehelper.insertData(hea.text,con.text);
                               addData(hea.text,con.text);}
                         )
                     ),

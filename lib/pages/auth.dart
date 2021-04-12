@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:notes3/pages/test.dart';
+import 'package:notes3/pages/database.dart';
 
 class AuthScreen extends StatefulWidget {
   @override
@@ -24,15 +25,14 @@ class _AuthScreen extends State<AuthScreen> {
         idToken: gSA.idToken, accessToken: gSA.accessToken);
 
     await _auth.signInWithCredential(credential);
-    try {
-      final result = await InternetAddress.lookup('google.com');
-      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => Test()));
-      }
-    } catch (error){
-
+    final result = await InternetAddress.lookup('google.com');
+    if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => Test()));
+    }else{Navigator.push(
+        context, MaterialPageRoute(builder: (context) => Databasehelper()));
     }
+
   }
 
   @override

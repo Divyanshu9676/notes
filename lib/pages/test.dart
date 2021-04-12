@@ -1,15 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:notes3/pages/updatenotes.dart';
+import 'package:notes3/pages/auth.dart';
 import 'package:notes3/pages/delete.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
+// ignore: must_be_immutable
 class Test extends StatefulWidget {
   @override
   _TestState createState() => _TestState();
 }
 
 class _TestState extends State<Test> {
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
   String title, content;
+
+  void signOut() async {
+    await _auth.signOut();
+    await _googleSignIn.signOut();
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => AuthScreen()));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,10 +60,10 @@ class _TestState extends State<Test> {
                         return Row(
                           children: <Widget>[
                             Expanded(
-                              child: Text(documentSnapshot["title"]),
+                              child: Text(documentSnapshot["title"],style: TextStyle(fontSize: 25),),
                             ),
                             Expanded(
-                              child: Text(documentSnapshot["content"]),
+                              child: Text(documentSnapshot["content"],style: TextStyle(fontSize: 25),),
                             ),
                           ],
                         );
@@ -73,7 +87,11 @@ class _TestState extends State<Test> {
                   onPressed: () {Navigator.push(
                       context, MaterialPageRoute(builder: (context) => Delete()));
                   },
-                )
+                ),
+                RaisedButton(
+                  child: Text("SignOut"),
+                  onPressed: () {signOut();},
+                ),
               ],
             ),
           ],

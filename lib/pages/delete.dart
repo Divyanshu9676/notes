@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
+import 'package:notes3/pages/database.dart';
 
 class Delete extends StatefulWidget {
   @override
@@ -9,11 +9,13 @@ class Delete extends StatefulWidget {
 
 class _DeleteState extends State<Delete> {
   TextEditingController name = TextEditingController();
+  Databasehelper databasehelper;
   String n;
 
   deleteData() {
+    n=name.text;
     DocumentReference documentReference =
-    FirebaseFirestore.instance.collection("MyData").doc("$name");
+    FirebaseFirestore.instance.collection("MyData").doc("$n");
 
     documentReference.delete().whenComplete(() {
       Text("$name deleted");
@@ -38,7 +40,8 @@ class _DeleteState extends State<Delete> {
                 )),
             RaisedButton(
               child: Text("Confirm Delete"),
-              onPressed: () {deleteData();},
+              onPressed: () {databasehelper.deleteData(name.text);
+                deleteData();},
             )
           ],
         ),
