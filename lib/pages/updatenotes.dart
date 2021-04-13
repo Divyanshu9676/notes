@@ -49,7 +49,7 @@ class _AddnoteState extends State<Addnote> {
                     Center(
                         child: RaisedButton(
                             child: Text("Save the NOTE"),
-                            onPressed: () {databasehelper.insertData(hea.text,con.text);
+                            onPressed: () {Databasehelper.instance.insertData(hea.text,con.text);
                               addData(hea.text,con.text);}
                         )
                     ),

@@ -14,8 +14,14 @@ class AuthScreen extends StatefulWidget {
 class _AuthScreen extends State<AuthScreen> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn(); //Initializes global sign-in configuration settings
+  Databasehelper databasehelper;
+  List a;
 
-
+  Future<void> intoapp() async {
+    final result = await InternetAddress.lookup('google.com');
+    if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {handleSignIn(context);}
+    else{}
+  }
 
   Future<void> handleSignIn(BuildContext context) async {
     final GoogleSignInAccount account = await _googleSignIn.signIn(); //instance ka method
@@ -25,14 +31,8 @@ class _AuthScreen extends State<AuthScreen> {
         idToken: gSA.idToken, accessToken: gSA.accessToken);
 
     await _auth.signInWithCredential(credential);
-    final result = await InternetAddress.lookup('google.com');
-    if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => Test()));
-    }else{Navigator.push(
-        context, MaterialPageRoute(builder: (context) => Databasehelper()));
-    }
-
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => Test()));
   }
 
   @override
@@ -44,7 +44,7 @@ class _AuthScreen extends State<AuthScreen> {
               children: <Widget>[
                 RaisedButton(
                   child: Text("Sign In"),
-                  onPressed: () {handleSignIn(context);},
+                  onPressed: () {intoapp();},
                 ),
               ]
           ),

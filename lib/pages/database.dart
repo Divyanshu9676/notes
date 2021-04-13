@@ -37,27 +37,23 @@ class Databasehelper{
     );
   }
 
-  Future<void> insertData(String head,String content) async {
-    Database db = await Databasehelper.instance.database;
-    Map<String, dynamic> row = {
-      Databasehelper.title : head,
-      Databasehelper.content  : content,
-    };
-    int id = await db.insert(Databasehelper.table, row);
-    print(await db.query(Databasehelper.table));
+  Future<void> insertData(String head,String body) async {
+    Database db = await instance.database;
+    db.rawInsert(
+        'INSERT INTO $table'
+            '($title, $content '
+            'VALUES($head, $body)', [head, body]);
   }
 
   Future<List> getAllRecords(String dbTable) async {
-    var dbClient = await database;
+    var dbClient = await instance.database;
     var result = await dbClient.rawQuery("SELECT * FROM $dbTable");
     print (result.toList());
     return result.toList();
   }
 
   Future<void> deleteData(String heading) async {
-    final db = await database;
-    await db.delete(table, where: "title = $heading", whereArgs: [heading],);
+    final db = await instance.database;
+    await db.delete(table, where: "title = ?", whereArgs: [heading],);
   }
-  @override
-
 }

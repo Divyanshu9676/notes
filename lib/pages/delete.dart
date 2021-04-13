@@ -40,7 +40,7 @@ class _DeleteState extends State<Delete> {
                 )),
             RaisedButton(
               child: Text("Confirm Delete"),
-              onPressed: () {databasehelper.deleteData(name.text);
+              onPressed: () {Databasehelper.instance.deleteData(name.text);
                 deleteData();},
             )
           ],
