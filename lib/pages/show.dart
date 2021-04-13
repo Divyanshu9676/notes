@@ -1,19 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:notes3/pages/database.dart';
 
-// ignore: camel_case_types
-class offline extends StatefulWidget {
-  @override
-  _offlineState createState() => _offlineState();
-}
-
-class _offlineState extends State<offline> {
+class offline extends StatelessWidget {
+  var a = Databasehelper.instance.queryAll();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
+      appBar: AppBar(
         title: Text("Notes"),),
-      body: Text(""),
+      body: Center(
+        child: Column(
+            children: <Widget>[
+              RaisedButton(
+                child: Text("Show offline data"),
+                onPressed: () async {print(await a);},
+              ),
+            ]
+        )
+      )
     );
   }
 }
+

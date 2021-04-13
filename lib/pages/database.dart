@@ -59,7 +59,7 @@ class Databasehelper{
 
   Future<List> queryAll() async {
     Database db = await instance.database;
-    final List<Map> maps = await db.query(table);
+    final List<Map<String, dynamic>> maps = await db.query(table);
     return List.generate(maps.length, (i) {
       return Databasehelper._privateConstructor(
         title: maps[i]['title'],
@@ -67,5 +67,4 @@ class Databasehelper{
       );
     });
   }
-
 }
