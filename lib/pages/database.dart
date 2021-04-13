@@ -29,10 +29,7 @@ class Databasehelper{
   Future _onCreate(Database db, int version) async{
     await db.execute(
       '''
-      CREATE TABLE $table (
-      $title TEXT PRIMARY KEY,
-      $content TEXT NOT NULL
-      )
+      CREATE TABLE $table ($title TEXT PRIMARY KEY,$content TEXT NOT NULL)
       '''
     );
   }
@@ -41,8 +38,8 @@ class Databasehelper{
     Database db = await instance.database;
     db.rawInsert(
         'INSERT INTO $table'
-            '($title, $content '
-            'VALUES($head, $body)', [head, body]);
+            '($title, $content) '
+            'VALUES(?,?)', [head, body]);
   }
 
   Future<List> getAllRecords(String dbTable) async {
