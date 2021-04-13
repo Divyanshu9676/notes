@@ -11,7 +11,7 @@ class Databasehelper{
   static final content = 'content';
   static Database _database;
 
-  Databasehelper._privateConstructor();
+  Databasehelper._privateConstructor({title, content});
   static final Databasehelper instance = Databasehelper._privateConstructor();
 
   Future<Database> get database async{
@@ -56,4 +56,16 @@ class Databasehelper{
     final db = await instance.database;
     await db.delete(table, where: "title = ?", whereArgs: [heading],);
   }
+
+  Future<List> queryAll() async {
+    Database db = await instance.database;
+    final List<Map> maps = await db.query(table);
+    return List.generate(maps.length, (i) {
+      return Databasehelper._privateConstructor(
+        title: maps[i]['title'],
+        content: maps[i]['content'],
+      );
+    });
+  }
+
 }

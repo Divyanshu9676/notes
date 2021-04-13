@@ -5,6 +5,7 @@ import 'package:flutter/rendering.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:notes3/pages/test.dart';
 import 'package:notes3/pages/database.dart';
+import 'package:notes3/pages/show.dart';
 
 class AuthScreen extends StatefulWidget {
   @override
@@ -18,9 +19,13 @@ class _AuthScreen extends State<AuthScreen> {
   List a;
 
   Future<void> intoapp() async {
-    final result = await InternetAddress.lookup('google.com');
-    if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {handleSignIn(context);}
-    else{}
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {handleSignIn(context);}
+    } on SocketException catch (_) {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => offline()));
+    }
   }
 
   Future<void> handleSignIn(BuildContext context) async {
