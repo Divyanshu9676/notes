@@ -34,19 +34,6 @@ class _TestState extends State<Test> {
       body: Center(
         child: Column(
           children: <Widget>[
-            Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    child: Text("Title"),
-                  ),
-                  Expanded(
-                    child: Text("Body"),
-                  ),
-                ],
-              ),
-            ),
             StreamBuilder(
               stream: FirebaseFirestore.instance.collection("MyData").snapshots(),//pathway
               builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -57,15 +44,11 @@ class _TestState extends State<Test> {
                       itemBuilder: (context, index) {
                         DocumentSnapshot documentSnapshot =
                         snapshot.data.docs[index];
-                        return Row(
-                          children: <Widget>[
-                            Expanded(
-                              child: Text(documentSnapshot["title"],style: TextStyle(fontSize: 25),),
-                            ),
-                            Expanded(
-                              child: Text(documentSnapshot["content"],style: TextStyle(fontSize: 25),),
-                            ),
-                          ],
+                        return Card(
+                          child: ListTile(
+                            title: Text(documentSnapshot["title"]),
+                            subtitle: Text(documentSnapshot["content"]),
+                          ),
                         );
                       });
                 } else {

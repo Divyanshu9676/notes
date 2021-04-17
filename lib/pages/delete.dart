@@ -9,7 +9,6 @@ class Delete extends StatefulWidget {
 
 class _DeleteState extends State<Delete> {
   TextEditingController name = TextEditingController();
-  Databasehelper databasehelper;
   String n;
 
   deleteData() {

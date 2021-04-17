@@ -10,7 +10,6 @@ class Addnote extends StatefulWidget {
 class _AddnoteState extends State<Addnote> {
   final TextEditingController hea = TextEditingController();
   final TextEditingController con = TextEditingController();
-  Databasehelper databasehelper;
 
   void addData(String head,String content) {
     DocumentReference ref =
@@ -30,7 +29,6 @@ class _AddnoteState extends State<Addnote> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    SizedBox(height: 250.0),
                     Padding(
                       padding: EdgeInsets.all(10.0),
                       child: TextField(
